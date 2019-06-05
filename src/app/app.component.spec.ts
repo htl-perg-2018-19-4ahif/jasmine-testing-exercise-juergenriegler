@@ -116,4 +116,25 @@ describe('AppComponent', () => {
     const totalPriceExclusiveVatInput: HTMLTableDataCellElement = ne.querySelector('#totalPriceExclusiveVat');
     expect(totalPriceExclusiveVatInput.textContent).toBe('42.00');
   });
+
+  it('should not allow the price to be negative', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const de = fixture.debugElement;
+    const ne: HTMLElement = de.nativeElement;
+    const app: AppComponent = de.componentInstance;
+
+    app.product = 'Burger';
+    app.priceInclusiveVat = -6;
+    app.vatCategoryString = 'Food';
+    app.addInvoice();
+    expect(app.negativeValueMessage).toBe(true);
+
+    app.product = 'Coca Cola';
+    app.priceInclusiveVat = 2;
+    app.vatCategoryString = 'Drinks';
+    app.addInvoice();
+    expect(app.negativeValueMessage).toBe(false);
+
+  });
+
 });
